@@ -49,7 +49,7 @@ class Home extends React.Component {
           direction="right"
           inverted
           onHide={() =>
-            this.setState({
+            this.setState({ 
               visible: false,
             })
           }

@@ -7,7 +7,6 @@ import {
   Card,
   Image,
   Modal,
-  Header,
   Button,
 } from "semantic-ui-react";
 import apiCall from "../../api";

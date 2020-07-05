@@ -73,7 +73,7 @@ class Home extends React.Component {
         UpdatedCartDetails.loading = false
         UpdatedCartDetails.price = thisCartDetails.price
         UpdatedCartDetails.imageURL = thisCartDetails.imageURL
-        UpdatedCartDetails.describtion = thisCartDetails.describtion
+        UpdatedCartDetails.description = thisCartDetails.description
         otherCartDetails.push(UpdatedCartDetails)
         var sortedCartDetails = otherCartDetails.sort((a, b) => a.id - b.id)
         this.setState({

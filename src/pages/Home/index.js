@@ -76,7 +76,7 @@ class Home extends React.Component {
             orderInfo.append('address', item.address);
             orderInfo.append('total_price', Total_Price);
             apiCall(`orders`, "post", orderInfo, null, (res) => {
-              swal("Yummy!", "Your Pizzas are on thier way!!", "success");
+              swal("Yummy!", "Your Pizzas are on their way!!", "success");
               this.setState({
                 submitOrderLoading: false
               }, () => {
@@ -191,11 +191,13 @@ class Home extends React.Component {
         cartArray.push(res)
         window.localStorage["pizzapp.cart"] = JSON.stringify(cartArray)
       }
-      this.close()
       swal("Yummy!", "Pizza has been added to cart", "success");
+
       this.fetchCartDetails()
       this.setState({
         formLoading: false
+      }, () => {
+        this.close()
       })
     }, (err) => {
     })

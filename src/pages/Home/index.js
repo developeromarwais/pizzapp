@@ -357,7 +357,7 @@ class Home extends React.Component {
                           })
                         }} position='right'>
                           <Transition animation={"tada"} duration={500} visible={animateCart}>
-                            <Icon inverted color='black' name='shopping cart' size='huge' />
+                            <Icon inverted color='black' name='shopping cart' size='large' />
                           </Transition>
                           <Label circular color={"red"} key={"red"}>
                             {

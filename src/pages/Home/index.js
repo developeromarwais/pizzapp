@@ -399,30 +399,26 @@ class Home extends React.Component {
                             <Grid.Row style={{ fontSize: "18px" }}>
                               <Grid.Column width={2}>
                                 <div className="buttons">
-                                  <div className="button sho-play-link">
-                                    <span
-                                      onClick={() => {
-                                        this.setState({
-                                          visible: true,
-                                        });
-                                      }}
-                                    >
-                                      Show menu
+                                  <div className="button sho-play-link" onClick={() => {
+                                    this.setState({
+                                      visible: true,
+                                    });
+                                  }}>
+                                    <span >
+                                      Show Menu
                                       </span>
                                   </div>
                                 </div>
                               </Grid.Column>
                               <Grid.Column width={2}>
                                 <div className="buttons">
-                                  <div className="button sho-play-link">
-                                    <span
-                                      onClick={() => {
-                                        this.setState({
-                                          cartOpen: true,
-                                        });
-                                      }}
-                                    >
-                                      Open cart
+                                  <div className="button sho-play-link" onClick={() => {
+                                    this.setState({
+                                      cartOpen: true,
+                                    });
+                                  }}>
+                                    <span>
+                                      Open Cart
                                       </span>
                                   </div>
                                 </div>
@@ -443,10 +439,10 @@ class Home extends React.Component {
                               <Grid.Row style={{ fontSize: "18px" }}>
                                 <Grid.Column width={2}>
                                   <div className="buttons">
-                                    <div className="button sho-play-link">
-                                      <span onClick={() => {
-                                        this.setState({ SignInOpen: true, singInMode: 1 })
-                                      }}>
+                                    <div className="button sho-play-link" onClick={() => {
+                                      this.setState({ SignInOpen: true, singInMode: 1 })
+                                    }}>
+                                      <span>
                                         Sign Up
                                       </span>
                                     </div>
@@ -454,10 +450,10 @@ class Home extends React.Component {
                                 </Grid.Column>
                                 <Grid.Column width={2}>
                                   <div className="buttons">
-                                    <div className="button sho-play-link">
-                                      <span onClick={() => {
-                                        this.setState({ SignInOpen: true, singInMode: 0 })
-                                      }}>
+                                    <div className="button sho-play-link" onClick={() => {
+                                      this.setState({ SignInOpen: true, singInMode: 0 })
+                                    }}>
+                                      <span>
                                         Sign In
                                       </span>
                                     </div>

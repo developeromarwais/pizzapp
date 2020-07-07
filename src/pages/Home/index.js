@@ -7,6 +7,7 @@ import {
   Sidebar,
   Grid,
   Tab,
+  Transition,
   Card,
   Label,
   Image,
@@ -15,6 +16,7 @@ import {
   Divider,
 } from "semantic-ui-react";
 import { Form } from 'formsy-semantic-ui-react';
+import SignIn from '../../components/SignIn/index'
 import apiCall from "../../api";
 import swal from 'sweetalert';
 import "./style.scss";
@@ -31,8 +33,12 @@ class Home extends React.Component {
       describtion: "",
       valid: false,
       open: false,
+      singInMode: 0,
+      SignInOpen: false,
       userCartDetails: [],
+      animateCart: true,
       cartOpen: false,
+      userIsIn: false,
       TabAtiveIndex: 0,
       submitOrderLoading: false,
       menu: [],
@@ -41,12 +47,22 @@ class Home extends React.Component {
   show = (dimmer) => {
     this.setState({ dimmer, open: true })
   }
-  close = () => this.setState({ open: false })
+  close = () => {
+    this.setState({
+      open: false
+    }, () => {
+      this.toggleVisibility()
+    })
+  }
 
   Cartshow = (dimmer) => {
     this.setState({ dimmer, cartOpen: true })
   }
   Cartclose = () => this.setState({ cartOpen: false })
+
+  UserIsIn = () => {
+    this.setState({ userIsIn: true })
+  }
 
 
   SubmitOrder = (item) => {
@@ -195,7 +211,7 @@ class Home extends React.Component {
 
       this.fetchCartDetails()
       this.setState({
-        formLoading: false
+        formLoading: false,
       }, () => {
         this.close()
       })
@@ -203,10 +219,28 @@ class Home extends React.Component {
     })
   }
 
+  toggleVisibility = () => this.setState(prevState => ({ animateCart: !prevState.animateCart }));
+
+  logOut = () => {
+    const config = {
+      headers: { Authorization: `Bearer ${window.localStorage["pizzapp.api_token"]}` }
+    };
+    apiCall(`logout`, "post", null, config, (res) => {
+      localStorage.removeItem("pizzapp.api_token")
+      localStorage.removeItem("pizzapp.userId")
+      this.setState({
+        userIsIn: false
+      })
+    }, (err) => {
+    })
+  }
 
   componentDidMount() {
     this.fetchPosts();
     this.fetchCartDetails();
+    if (typeof (window.localStorage["pizzapp.api_token"]) !== "undefined") {
+      this.setState({ userIsIn: true })
+    }
   }
 
   fetchCartDetails() {
@@ -246,8 +280,14 @@ class Home extends React.Component {
     );
   }
 
+  CloseSignIn = () => {
+    this.setState({
+      SignInOpen: false
+    })
+  }
+
   render() {
-    const { open, dimmer, menu, pizzaItem, cartOpen, userCartDetails, submitOrderLoading, TabAtiveIndex } = this.state
+    const { open, dimmer, menu, pizzaItem, cartOpen, userCartDetails, submitOrderLoading, TabAtiveIndex, SignInOpen, singInMode, userIsIn, animateCart } = this.state
     var cartDetailsTotalPrice = userCartDetails.length > 1 ? parseFloat(userCartDetails.reduce((a, b) => {
       return parseFloat(parseFloat(a.price * a.quantity) + parseFloat(b.price * b.quantity));
     }).toFixed(2)) : userCartDetails.length > 0 ? parseFloat(userCartDetails[0].price * userCartDetails[0].quantity) : 0;
@@ -356,8 +396,9 @@ class Home extends React.Component {
     ]
     return (
       <>
+        <SignIn SignInOpen={SignInOpen} mode={singInMode} userIsIn={this.UserIsIn} CloseSignIn={this.CloseSignIn} />
         <Modal open={cartOpen} onClose={this.Cartclose}>
-          <Modal.Content >
+          <Modal.Content style={{ maxHeight: '600px', overflowX: 'scroll' }}>
             <Modal.Description>
 
               {userCartDetails.length > 0 ?
@@ -498,12 +539,21 @@ class Home extends React.Component {
                             TabAtiveIndex: 0
                           })
                         }} position='right'>
-                          <Icon inverted color='black' name='shopping cart' size='huge' />
+                          <Transition animation={"tada"} duration={500} visible={animateCart}>
+                            <Icon inverted color='black' name='shopping cart' size='huge' />
+                          </Transition>
                           <Label circular color={"red"} key={"red"}>
                             {
                               userCartDetails.length
                             }
                           </Label>
+                        </Menu.Item>
+                        <Menu.Item style={{ zIndex: 2, cursor: "pointer" }}>
+                          {userIsIn && (
+                            <Button type='button' onClick={() => {
+                              this.logOut()
+                            }} negative icon='log out' labelPosition='right' content="Logout" />
+                          )}
                         </Menu.Item>
                       </Menu>
                       <div className="shade"></div>
@@ -512,25 +562,85 @@ class Home extends React.Component {
                           <span className="dash"></span>
                           <span className="promo-flag">
                             Get Your favoraite PIZZA from
-                        </span>
+                          </span>
                           <div className="copy">
                             <div className="headline">PIZZAPP</div>
                             <p className="body long">Browse from our menu</p>
                           </div>
-                          <div className="buttons">
-                            <div className="button sho-play-link">
-                              <span
-                                onClick={() => {
-                                  this.setState({
-                                    visible: true,
-                                  });
-                                }}
-                              >
-                                Show menu
-                            </span>
-                            </div>
-                          </div>
+                          <Grid columns={2}>
+                            <Grid.Row style={{ fontSize: "18px" }}>
+                              <Grid.Column width={2}>
+                                <div className="buttons">
+                                  <div className="button sho-play-link">
+                                    <span
+                                      onClick={() => {
+                                        this.setState({
+                                          visible: true,
+                                        });
+                                      }}
+                                    >
+                                      Show menu
+                                      </span>
+                                  </div>
+                                </div>
+                              </Grid.Column>
+                              <Grid.Column width={2}>
+                                <div className="buttons">
+                                  <div className="button sho-play-link">
+                                    <span
+                                      onClick={() => {
+                                        this.setState({
+                                          cartOpen: true,
+                                        });
+                                      }}
+                                    >
+                                      Open cart
+                                      </span>
+                                  </div>
+                                </div>
+                              </Grid.Column>
+                            </Grid.Row>
+                          </Grid>
+
                         </div>
+
+
+                        {!userIsIn && (
+                          <div className="promo-text">
+                            <span className="dash"></span>
+                            <span className="promo-flag">
+                              To be able to track your orders <br /> please Sign up or sign in <br /> before adding items to the cart
+                             </span>
+                            <Grid columns={2}>
+                              <Grid.Row style={{ fontSize: "18px" }}>
+                                <Grid.Column width={2}>
+                                  <div className="buttons">
+                                    <div className="button sho-play-link">
+                                      <span onClick={() => {
+                                        this.setState({ SignInOpen: true, singInMode: 1 })
+                                      }}>
+                                        Sign Up
+                                      </span>
+                                    </div>
+                                  </div>
+                                </Grid.Column>
+                                <Grid.Column width={2}>
+                                  <div className="buttons">
+                                    <div className="button sho-play-link">
+                                      <span onClick={() => {
+                                        this.setState({ SignInOpen: true, singInMode: 0 })
+                                      }}>
+                                        Sign In
+                                      </span>
+                                    </div>
+                                  </div>
+                                </Grid.Column>
+                              </Grid.Row>
+                            </Grid>
+                          </div>
+                        )}
+
+
                       </div>
                     </div>
                   </div>

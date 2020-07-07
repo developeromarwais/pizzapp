@@ -132,7 +132,10 @@ class Orders extends React.Component {
         return (<Modal open={OrdersOpen} onClose={this.OrdersClose}>
             <Modal.Content style={{ maxHeight: '600px', overflowX: 'scroll' }}>
                 <Modal.Description>
-                    <Tab activeIndex={TabAtiveIndex} panes={panes} />
+                    {userOrders.length > 0 ? (
+                        <Tab activeIndex={TabAtiveIndex} panes={panes} />
+                    ) : "Empty Order list, Make orders if you're feeling hungry 🍕"}
+
                 </Modal.Description>
             </Modal.Content>
             <Modal.Actions>

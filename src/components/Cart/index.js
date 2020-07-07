@@ -29,6 +29,7 @@ class Cart extends React.Component {
     componentWillReceiveProps(props) {
         this.setState({
             CartOpen: props.CartOpen,
+            TabAtiveIndex: props.TabAtiveIndex,
             userCartDetails: props.userCartDetails ? props.userCartDetails.map(item => {
                 item.loading = false
                 return item

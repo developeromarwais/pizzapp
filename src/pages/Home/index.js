@@ -79,6 +79,9 @@ class Home extends React.Component {
     })
     if (typeof (window.localStorage["pizzapp.cartId"]) === "undefined") {
       let cartInfo = new FormData();
+      if (this.state.userIsIn && typeof (window.localStorage["pizzapp.userId"]) !== "undefined") {
+        cartInfo.append('UserId', window.localStorage["pizzapp.userId"]);
+      }
       apiCall(`carts`, "post", cartInfo, null, (res) => {
         window.localStorage["pizzapp.cartId"] = res.data.id;
         this.addCartDetails();
@@ -111,7 +114,45 @@ class Home extends React.Component {
         cartArray.push(res)
         window.localStorage["pizzapp.cart"] = JSON.stringify(cartArray)
       }
-      swal("Yummy!", "Pizza has been added to cart", "success");
+      // swal("Yummy!", "Pizza has been added to cart", "success");
+      swal({
+        buttons: {
+          review: {
+            text: "Review your cart!",
+            value: "review",
+          },
+          add: {
+            text: "Add another Pizza 🍕!",
+            value: "add",
+          },
+          submit: {
+            text: "Submit your order!",
+            value: "submit",
+          },
+        },
+        icon: "success",
+        title: "Yummy!",
+        text: "Pizza has been added to cart!",
+      })
+        .then((value) => {
+          switch (value) {
+            case "review":
+              this.setState({
+                cartOpen: true,
+                TabAtiveIndex: 0
+              }); break;
+            case "add":
+              this.setState({
+                visible: true,
+              }); break;
+            case "submit":
+              this.setState({
+                cartOpen: true,
+                TabAtiveIndex: 1
+              }); break;
+            default:
+          }
+        });
 
       this.fetchCartDetails()
       this.setState({
@@ -197,14 +238,14 @@ class Home extends React.Component {
   }
 
   render() {
-    const { open, dimmer, menu, pizzaItem, cartOpen, userCartDetails, SignInOpen, singInMode, userIsIn, animateCart, OrdersOpen } = this.state
+    const { open, dimmer, menu, pizzaItem, cartOpen, userCartDetails, SignInOpen, singInMode, userIsIn, animateCart, OrdersOpen, TabAtiveIndex } = this.state
 
 
     return (
       <>
         <SignIn SignInOpen={SignInOpen} mode={singInMode} userIsIn={this.UserIsIn} CloseSignIn={this.CloseSignIn} />
         <Orders OrdersOpen={OrdersOpen} CloseOrders={this.CloseOrders} />
-        <Cart fetchCartDetails={this.cartFetchDetails} userCartDetails={userCartDetails} CartOpen={cartOpen} CloseCart={this.Cartclose} />
+        <Cart fetchCartDetails={this.cartFetchDetails} TabAtiveIndex={TabAtiveIndex} userCartDetails={userCartDetails} CartOpen={cartOpen} CloseCart={this.Cartclose} />
 
 
         <Modal dimmer={dimmer} open={open} onClose={this.close}>
@@ -299,6 +340,7 @@ class Home extends React.Component {
               <div className="promotion-carousel">
                 <div className="promotions">
                   <div>
+
                     <div
                       className="promotion"
                       id="section1"
@@ -307,7 +349,7 @@ class Home extends React.Component {
                           "url(https://steemitimages.com/DQmXFAYnwt36DiQmzvcahwNmBpb7kWJyeKS8DMUoHgMTSmZ/Pizza-HD-Desktop-Wallpaper-15280.jpg)",
                       }}
                     >
-                      <Menu style={{ background: "transparent", border: "none" }} color={"red"} borderless={true} attached='top'>
+                      <Menu size={"small"} fixed={"top"}  >
                         <Menu.Item style={{ zIndex: 2, cursor: "pointer" }} onClick={() => {
                           this.setState({
                             cartOpen: true,
@@ -315,7 +357,7 @@ class Home extends React.Component {
                           })
                         }} position='right'>
                           <Transition animation={"tada"} duration={500} visible={animateCart}>
-                            <Icon inverted color='green' name='shopping circular cart' size='big' />
+                            <Icon inverted color='black' name='shopping cart' size='huge' />
                           </Transition>
                           <Label circular color={"red"} key={"red"}>
                             {
@@ -350,7 +392,7 @@ class Home extends React.Component {
                             Get Your favoraite PIZZA from
                           </span>
                           <div className="copy">
-                            <div className="headline">PIZZAPP</div>
+                            <div className="headline">PIZZAPP <span role="img" aria-label="pizza">🍕</span></div>
                             <p className="body long">Browse from our menu</p>
                           </div>
                           <Grid columns={2}>

@@ -352,6 +352,11 @@ class Home extends React.Component {
                       }}
                     >
                       <Menu size={"small"} fixed={"top"}  >
+                        <Menu.Item style={{ zIndex: 2, cursor: "pointer" }} position='left'>
+                          <Label style={{ fontSize: "30px", borderRadius: "0 20px 69px 0" }} color={"red"} key={"red"}>
+                            <div className="headline">PIZZAPP <span role="img" aria-label="pizza">🍕</span></div>
+                          </Label>
+                        </Menu.Item>
                         <Menu.Item style={{ zIndex: 2, cursor: "pointer" }} onClick={() => {
                           this.setState({
                             cartOpen: true,
@@ -361,7 +366,7 @@ class Home extends React.Component {
                           <Transition animation={"tada"} duration={500} visible={animateCart}>
                             <Icon inverted color='black' name='shopping cart' size='large' />
                           </Transition>
-                          <Label circular color={"red"} key={"red"}>
+                          <Label color={"red"} key={"red"}>
                             {
                               userCartDetails ? userCartDetails.length : 0
                             }
@@ -382,7 +387,6 @@ class Home extends React.Component {
                                 this.logOut()
                               }} negative icon='log out' labelPosition='right' content="Logout" />
                             </>
-
                           )}
                         </Menu.Item>
                       </Menu>

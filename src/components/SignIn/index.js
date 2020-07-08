@@ -58,6 +58,8 @@ class SignIn extends React.Component {
             })
             window.localStorage["pizzapp.api_token"] = res.data.data.api_token;
             window.localStorage["pizzapp.userId"] = res.data.data.id;
+            window.localStorage["pizzapp.userName"] = res.data.data.name;
+            window.localStorage["pizzapp.userSur"] = res.data.data.surname;
             this.SingInClose()
             debugger
             this.props.userIsIn()
@@ -103,6 +105,8 @@ class SignIn extends React.Component {
             })
             window.localStorage["pizzapp.api_token"] = res.data.data.api_token;
             window.localStorage["pizzapp.userId"] = res.data.data.id;
+            window.localStorage["pizzapp.userName"] = res.data.data.name;
+            window.localStorage["pizzapp.userSur"] = res.data.data.surname;
             this.SingInClose()
             this.props.userIsIn()
             if (typeof (window.localStorage["pizzapp.cartId"]) !== "undefined") {
@@ -226,7 +230,7 @@ class SignIn extends React.Component {
         ]
         return (
             <>
-                <Modal open={SignInOpen} onClose={this.SingInClose}>
+                <Modal open={SignInOpen} onClose={this.SingInClose} closeIcon>
                     <Modal.Content >
                         <Modal.Description>
                             <Tab activeIndex={TabAtiveIndex} panes={panes} />

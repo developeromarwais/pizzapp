@@ -191,6 +191,8 @@ class Cart extends React.Component {
                                                 <br />
                                                 <span style={{ color: "#7b7b7b", fontSize: "18px" }}>Pizza Price :</span>  ${item.price} - €{(item.price * 0.71).toFixed(2)}
                                                 <br />
+                                                <span style={{ color: "#7b7b7b", fontSize: "18px" }}>Sub total Price :</span>  ${item.price * item.quantity} - €{((item.price * item.quantity) * 0.71).toFixed(2)}
+                                                <br />
                                             </Grid.Column>
                                             <Grid.Column width={9}>
                                                 <Form loading={item.loading} onValidSubmit={this.updateCart}>
@@ -229,9 +231,9 @@ class Cart extends React.Component {
                 render: () => <Tab.Pane>
                     <Form loading={submitOrderLoading} onValidSubmit={this.SubmitOrder}>
                         <div style={{ color: "#7b7b7b", fontSize: "18px", textAlign: "left", padding: "10px" }}>First Name :</div>
-                        <Form.Input name="Firstname" required={true} type={"text"} fluid placeholder='First Name' />
+                        <Form.Input name="Firstname" required={true} value={typeof (window.localStorage["pizzapp.userName"]) !== "undefined" ? window.localStorage["pizzapp.userName"] : ''} type={"text"} fluid placeholder='First Name' />
                         <div style={{ color: "#7b7b7b", fontSize: "18px", textAlign: "left", padding: "10px" }}>Surname :</div>
-                        <Form.Input name="Surname" required={true} type={"text"} fluid placeholder='Surname' />
+                        <Form.Input name="Surname" required={true} value={typeof (window.localStorage["pizzapp.userSur"]) !== "undefined" ? window.localStorage["pizzapp.userSur"] : ''} type={"text"} fluid placeholder='Surname' />
                         <div style={{ color: "#7b7b7b", fontSize: "18px", textAlign: "left", padding: "10px" }}>Address :</div>
                         <Form.TextArea name="address" required={true} placeholder='Detailed Address' />
                         <div style={{ color: "#7b7b7b", fontSize: "18px", textAlign: "left", padding: "10px" }}>Total Price :</div>
@@ -278,7 +280,7 @@ class Cart extends React.Component {
             },
         ]
         return (
-            <Modal open={CartOpen} onClose={this.CartClose}>
+            <Modal open={CartOpen} onClose={this.CartClose} closeIcon>
                 <Modal.Content style={{ maxHeight: '600px', overflowX: 'scroll' }}>
                     <Modal.Description>
                         {userCartDetails && userCartDetails.length > 0 ?

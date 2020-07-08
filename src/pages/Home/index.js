@@ -173,6 +173,8 @@ class Home extends React.Component {
     apiCall(`logout`, "post", null, config, (res) => {
       localStorage.removeItem("pizzapp.api_token")
       localStorage.removeItem("pizzapp.userId")
+      localStorage.removeItem("pizzapp.userName")
+      localStorage.removeItem("pizzapp.userSur")
       this.setState({
         userIsIn: false
       })
@@ -248,7 +250,7 @@ class Home extends React.Component {
         <Cart fetchCartDetails={this.cartFetchDetails} TabAtiveIndex={TabAtiveIndex} userCartDetails={userCartDetails} CartOpen={cartOpen} CloseCart={this.Cartclose} />
 
 
-        <Modal dimmer={dimmer} open={open} onClose={this.close}>
+        <Modal dimmer={dimmer} open={open} onClose={this.close} closeIcon>
           <Modal.Header>{`Add ${pizzaItem.name} to Cart`}</Modal.Header>
           <Modal.Content image>
             <Image
@@ -268,7 +270,7 @@ class Home extends React.Component {
                   this.setState({
                     quantity: e.target.value
                   })
-                }} required={true} type={"number"} fluid label='Quantity' placeholder='Quantity' />
+                }} required={true} type={"number"} value={1} fluid label='Quantity' placeholder='Quantity' />
                 <Form.TextArea onChange={(e) => {
                   this.setState({
                     describtion: e.target.value
@@ -298,8 +300,8 @@ class Home extends React.Component {
                 visible: false,
               })
             }
-            width="very wide"
             vertical
+            width="very wide"
             visible={this.state.visible}
           >
             <Menu.Item>
